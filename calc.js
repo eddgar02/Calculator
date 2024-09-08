@@ -99,15 +99,13 @@ acButton.addEventListener("click", () => {
 //event listener for the decimal button
 decimalButton.addEventListener("click", () => {
 
-    if (!decimalEnabled) {
-        display.textContent += '.';
-    }
-    if (!decimalEnabled && !secondSelected && !gotEqual) {
-        display.textContent = "0.";
-    } else if(!decimalEnabled && !secondSelected && gotEqual){
+    if (!decimalEnabled && !secondSelected && gotEqual){
         display.textContent ="0.";
+        gotEqual =false;
         firstSelected = false;
-    }
+    }else if (!decimalEnabled) {
+        display.textContent += '.';
+    } 
 
 
     decimalEnabled = true;
@@ -115,8 +113,11 @@ decimalButton.addEventListener("click", () => {
 
 //function when getting number button events
 function getNumber(e) {
-    
+    if(!firstSelected && e.target.textContent === '0'){
+        e.target.textContent = '';
+    }
     if (firstSelected && !operatorSelected) {
+        gotEqual =false;
         firstSelected = false;
         display.textContent = e.target.textContent;
     } else if (!firstSelected) {
