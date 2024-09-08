@@ -12,13 +12,6 @@ body{
 
 }
 
-.container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid red;
-}
-
 .calculator{
     display: flex;
     justify-content: center;
@@ -29,6 +22,8 @@ body{
     width: 370px;
     border-radius: 10%;
     gap:8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 50px;
 }
 
 .previous{
@@ -36,8 +31,11 @@ body{
     height: 70px;
     width: 300px;
     background-color: blue;
-    flex: 0 0 auto
-
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    font-size: 40px;
 }
 
 .output{
@@ -45,7 +43,11 @@ body{
     width: 300px;
     background-color: rgb(48, 78, 97);
     border-radius: 10%;
-    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 6px;
+
 }
 .buttonContainer{
     display: flex;
@@ -60,8 +62,8 @@ body{
 }
 
 button {
-    flex: 1,1,auto;
     height: 18%;
     width: 23%;
 
 }
+
