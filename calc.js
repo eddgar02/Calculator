@@ -29,6 +29,7 @@ function operate(num1, num2, op) {
         case 'x':
             return multiply(num1, num2);
         case '÷':
+
             return divide(num1, num2);
         case '^':
             return exponent(num1, num2);
@@ -69,9 +70,8 @@ let signEnabled = false;
 let firstSelected = false;
 let secondSelected = false;
 let operatorSelected = false;
-let afterEquals = false;
+let gotEqual = false;
 
-let displayValue = display.textContent
 
 //function to format numbers
 function formatNumber(num) {
@@ -102,22 +102,27 @@ decimalButton.addEventListener("click", () => {
     if (!decimalEnabled) {
         display.textContent += '.';
     }
-    if (!decimalEnabled && !secondSelected && firstSelected) {
+    if (!decimalEnabled && !secondSelected && !gotEqual) {
         display.textContent = "0.";
+    } else if(!decimalEnabled && !secondSelected && gotEqual){
+        display.textContent ="0.";
         firstSelected = false;
     }
+
+
     decimalEnabled = true;
 });
 
 //function when getting number button events
 function getNumber(e) {
-    if(firstSelected && !operatorSelected){
+    
+    if (firstSelected && !operatorSelected) {
         firstSelected = false;
         display.textContent = e.target.textContent;
-    }else if (!firstSelected) {
+    } else if (!firstSelected) {
         display.textContent += e.target.textContent;
         firstNumber = Number(display.textContent);
-    } else if(operatorSelected){
+    } else if (operatorSelected) {
         if (!secondSelected) {
             if (!decimalEnabled) {
                 display.textContent = '';
@@ -125,10 +130,8 @@ function getNumber(e) {
             secondSelected = true;
         }
         display.textContent += e.target.textContent;
-        secondNumber =Number(display.textContent);
-
+        secondNumber = Number(display.textContent);
     }
-
 }
 //getting button events
 for (let i = 0; i < buttons.length; i++) {
@@ -150,8 +153,9 @@ divButton.addEventListener("click", () => getOperation(divButton.textContent));
 mulButton.addEventListener("click", () => getOperation(mulButton.textContent));
 expButton.addEventListener("click", () => getOperation(expButton.textContent));
 
-eqButton.addEventListener("click", () => {
+function getEqual() {
     if (firstSelected && secondSelected) {
+        secondNumber = Number(display.textContent);
         let final = formatNumber(operate(firstNumber, secondNumber, operator));
         previous.textContent = final;
         display.textContent = final;
@@ -161,6 +165,29 @@ eqButton.addEventListener("click", () => {
         signEnabled = false;
         secondSelected = false;
         operatorSelected = false;
-        afterEquals = true;
+
+        gotEqual = true;
+    }
+}
+
+eqButton.addEventListener("click", () => getEqual());
+
+
+//Adding sign to number
+signButton.addEventListener("click", () => {
+    let currentContent = display.textContent;
+    if (firstNumber !== 0 && !secondSelected) {
+        if (!currentContent.startsWith('-')) {
+            display.textContent = '-' + currentContent;
+        } else {
+            display.textContent = Math.abs(Number(display.textContent));
+        }
+    } else if (firstSelected) {
+        if (!currentContent.startsWith('-')) {
+            display.textContent = '-' + currentContent;
+        } else {
+            display.textContent = Math.abs(Number(display.textContent));
+        }
+
     }
 });
