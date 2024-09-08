@@ -69,8 +69,17 @@ let signEnabled = false;
 let firstSelected = false;
 let secondSelected = false;
 let operatorSelected = false;
+let afterEquals = false;
 
 let displayValue = display.textContent
+
+//function to format numbers
+function formatNumber(num) {
+    if (num % 1 !== 0) {
+        return parseFloat(num.toFixed(6));
+    }
+    return num;
+}
 
 //clear button
 acButton.addEventListener("click", () => {
@@ -93,21 +102,30 @@ decimalButton.addEventListener("click", () => {
     if (!decimalEnabled) {
         display.textContent += '.';
     }
+    if (!decimalEnabled && !secondSelected && firstSelected) {
+        display.textContent = "0.";
+        firstSelected = false;
+    }
     decimalEnabled = true;
 });
 
 //function when getting number button events
 function getNumber(e) {
-    if (!firstSelected) {
+    if(firstSelected && !operatorSelected){
+        firstSelected = false;
+        display.textContent = e.target.textContent;
+    }else if (!firstSelected) {
         display.textContent += e.target.textContent;
         firstNumber = Number(display.textContent);
-    } else if (operatorSelected) {
+    } else if(operatorSelected){
         if (!secondSelected) {
-            display.textContent = '';
+            if (!decimalEnabled) {
+                display.textContent = '';
+            }
             secondSelected = true;
         }
         display.textContent += e.target.textContent;
-        secondNumber = Number(display.textContent);
+        secondNumber =Number(display.textContent);
 
     }
 
@@ -119,8 +137,9 @@ for (let i = 0; i < buttons.length; i++) {
 
 function getOperation(op) {
     firstSelected = true;
+    decimalEnabled = false;
     operatorSelected = true;
-    decimalEnabled= false;
+    firstNumber = Number(display.textContent);
     previous.textContent = `${firstNumber} ` + `${op}`;
     operator = op;
 }
@@ -132,15 +151,16 @@ mulButton.addEventListener("click", () => getOperation(mulButton.textContent));
 expButton.addEventListener("click", () => getOperation(expButton.textContent));
 
 eqButton.addEventListener("click", () => {
-    if (operatorSelected && secondSelected) {
-        let final = operate(firstNumber, secondNumber, operator);
+    if (firstSelected && secondSelected) {
+        let final = formatNumber(operate(firstNumber, secondNumber, operator));
         previous.textContent = final;
         display.textContent = final;
         firstNumber = final;
-        
+
         decimalEnabled = false;
         signEnabled = false;
         secondSelected = false;
         operatorSelected = false;
+        afterEquals = true;
     }
 });
