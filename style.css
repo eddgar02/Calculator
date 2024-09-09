@@ -17,7 +17,7 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: aquamarine;
+    background-color: rgb(30, 60, 79);
     height: 550px;
     width: 370px;
     border-radius: 10%;

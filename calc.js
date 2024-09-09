@@ -99,15 +99,15 @@ acButton.addEventListener("click", () => {
 //event listener for the decimal button
 decimalButton.addEventListener("click", () => {
 
-    if (!decimalEnabled && !secondSelected && gotEqual){
-        display.textContent ="0.";
-        gotEqual =false;
+    if (!decimalEnabled && !secondSelected && gotEqual) {
+        display.textContent = "0.";
+        gotEqual = false;
         firstSelected = false;
-    }else if (!decimalEnabled && operatorSelected && !secondSelected) {
+    } else if (!decimalEnabled && operatorSelected && !secondSelected) {
         display.textContent = '0.';
     } else if (!decimalEnabled) {
         display.textContent += '.';
-    } 
+    }
 
 
     decimalEnabled = true;
@@ -115,11 +115,11 @@ decimalButton.addEventListener("click", () => {
 
 //function when getting number button events
 function getNumber(e) {
-    if(display.textContent==="0"){
+    if (display.textContent === "0") {
         display.textContent = "";
     }
     if (firstSelected && !operatorSelected) {
-        gotEqual =false;
+        gotEqual = false;
         firstSelected = false;
         display.textContent = e.target.textContent;
     } else if (!firstSelected) {
@@ -142,12 +142,21 @@ for (let i = 0; i < buttons.length; i++) {
 }
 
 function getOperation(op) {
+    if (firstSelected && secondSelected) {
+        // If both first and second numbers are selected, perform the operation before applying the new operator
+        getEqual();
+        firstNumber = Number(display.textContent); // Set the result as the first number
+    } else {
+        firstNumber = Number(display.textContent); // Update first number
+    }
+
+    operator = op; // Update the operator
     firstSelected = true;
-    decimalEnabled = false;
     operatorSelected = true;
-    firstNumber = Number(display.textContent);
-    previous.textContent = `${firstNumber} ` + `${op}`;
-    operator = op;
+    secondSelected = false;
+    decimalEnabled = false;
+
+    previous.textContent = `${firstNumber} ${op}`;
 }
 
 addButton.addEventListener("click", () => getOperation(addButton.textContent));
@@ -157,19 +166,21 @@ mulButton.addEventListener("click", () => getOperation(mulButton.textContent));
 expButton.addEventListener("click", () => getOperation(expButton.textContent));
 
 function getEqual() {
-    if (firstSelected && secondSelected) {
+    if (firstSelected && operatorSelected) {
         secondNumber = Number(display.textContent);
-        let final = formatNumber(operate(firstNumber, secondNumber, operator));
-        previous.textContent = final;
-        display.textContent = final;
-        firstNumber = final;
 
-        decimalEnabled = false;
-        signEnabled = false;
-        secondSelected = false;
-        operatorSelected = false;
+        if (!isNaN(firstNumber) && !isNaN(secondNumber) && operator) {
+            let result = formatNumber(operate(firstNumber, secondNumber, operator));
+            display.textContent = result;
+            previous.textContent = `${result}`;
 
-        gotEqual = true;
+            // Prepare for chained operations
+            firstNumber = result;
+            operatorSelected = false; // Reset operator selection
+            secondSelected = false; // Reset second number selection
+            decimalEnabled = false; // Reset decimal flag
+            gotEqual = true; // Mark equals as pressed
+        }
     }
 }
 
@@ -197,5 +208,5 @@ signButton.addEventListener("click", () => {
 
 //Adding delete functionality
 delButton.addEventListener("click", () => {
-    display.textContent = display.textContent.slice(0,-1);
+    display.textContent = display.textContent.slice(0, -1);
 });
