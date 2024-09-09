@@ -113,8 +113,8 @@ decimalButton.addEventListener("click", () => {
 
 //function when getting number button events
 function getNumber(e) {
-    if(!firstSelected && e.target.textContent === '0'){
-        e.target.textContent = '';
+    if(display.textContent==="0"){
+        display.textContent = "";
     }
     if (firstSelected && !operatorSelected) {
         gotEqual =false;
