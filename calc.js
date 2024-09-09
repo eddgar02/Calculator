@@ -103,7 +103,9 @@ decimalButton.addEventListener("click", () => {
         display.textContent ="0.";
         gotEqual =false;
         firstSelected = false;
-    }else if (!decimalEnabled) {
+    }else if (!decimalEnabled && operatorSelected && !secondSelected) {
+        display.textContent = '0.';
+    } else if (!decimalEnabled) {
         display.textContent += '.';
     } 
 
