@@ -194,3 +194,8 @@ signButton.addEventListener("click", () => {
 
     }
 });
+
+//Adding delete functionality
+delButton.addEventListener("click", () => {
+    display.textContent = display.textContent.slice(0,-1);
+});
